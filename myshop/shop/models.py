@@ -1,4 +1,5 @@
 from django.db import  models
+from django.urls import reverse
 
 
 # Category Model
@@ -16,8 +17,11 @@ class  Category(models.Model):
         verbose_name_plural = 'categories'
         
         
-        def __str__(self):
-            return self.name
+        
+        def  get_absolute_url(self):
+            return reverse('shop:product_list_by_category', args=[self.slug])
+        
+       
         
         
  #products model 
@@ -51,7 +55,10 @@ class  Product(models.Model):
         ]
             
             
-    def __str__(self):
-           return self.name     
+    def  get_absolute_url(self):
+        return reverse('shop:product_detail', args=[self.id,self.slug])
+    #Convention to retrieve the URL for a given object
+    
+      
        
        
