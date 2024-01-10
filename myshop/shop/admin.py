@@ -1,15 +1,14 @@
-#Registering catalog  models on the administration site
 from django.contrib import admin
 from .models import Category,Product
-
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name','slug']
     prepopulated_fields = {'slug':('name',)}
-    
-    
+
+
+
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -17,8 +16,5 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ['available','created','updated']
     list_editable = ['price','available']
     prepopulated_fields = {'slug':('name',)}
-    #this field specifies where the  value is automatically set using value of other fields
-       
-       
-       
-#adding models to  categories so I can easily manage categories and Products 
+    #specify  fields  where  the value is automatically set using the value of
+    #other fields
