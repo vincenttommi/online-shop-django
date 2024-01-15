@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'shop.apps.ShopConfig',
+    'cart.apps.CartConfig',
 ]
 
 MIDDLEWARE = [
@@ -127,5 +128,7 @@ MEDIA_URL = 'media/'
 #is the base URL that serves media files  uploade by users
 MEDIA_ROOT = BASE_DIR / 'media'
 #is the local path where  files reside, which you build  dynamically prepending the BASE_DIR variable
+CART_SESSION_ID = 'cart'
+# a session  key to check if a custom session key is set
 
 
