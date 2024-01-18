@@ -1,0 +1,38 @@
+{% extends "shop/base.html" %}
+{%  load static %}
+
+
+
+{% block title %}
+Your shopping cart
+{% endblock %} 
+   <h1>Your shopping cart</h1>
+   <table class="cart">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Remove</th>
+            <th>Unit price</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in cart   %}
+        {% with product=item.product  %}
+        {% comment %}creating a local context using with statement {% endcomment %}
+        <tr>
+            <td>
+                <a  href="{{ product.get_absolute_url}}">
+                    <img  src="{% if product.image %}{{ product.image.url }}  {% else %}{% static "img/no_image.png "%}{% endif%} ">
+
+                </a>
+            </td>
+            <td>{{ product.name }}</td>
+            <td>{{ item.quantity }}</td>
+            {% comment %} The product is assigned the value  of item.product {% endcomment %}
+  
+        </tr>
+    </tbody>
+   </table>
