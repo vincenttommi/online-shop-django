@@ -19,9 +19,8 @@ class  Cart:
         #try to  get the  cart from the current session  with the above query
         #if no cart is present in the session, I create an empty cart by setting an empty 
         #dictionary in session
-        
         if not cart:
-            #save an empty cart in the session
+            #Initialize  an empty cart in the session
             cart = self.session[settings.CART_SESSION_ID] = {}
             self.cart = cart
             

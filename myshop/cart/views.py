@@ -58,6 +58,21 @@ def   cart_detail(request):
     #creating an instance of class Cart and passing a request
     return  render(request, 'cart/detail.html',{'cart':cart}) 
 
+
+
+# 
+def  product_detail(request, id,slug):
+    #passing request,id, slug as a parameter
+    product = get_object_or_404(Product, id=id, slug=slug, available=True)
+    #Getting the product based on the provided id and slug, if not found,return a 404 page
+    cart_product_form = CartAddProductForm()
+    #creating an instance  of the CartAddProductForm,this form is typically used to handle adding
+    #products  to a shopping cart
+    
+    return render(request,'shop/product/detail.html',{'product':product,'cart_product_form':cart_product_form})
+    # Render the detail.html template with the product information and cart form as context variables
+    
+
     
 
 

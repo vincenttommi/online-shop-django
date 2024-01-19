@@ -1,4 +1,4 @@
-{% extends "shop/base.html" %}
+{% extends "base.html" %}
 {%  load static %}
 
 
@@ -32,7 +32,27 @@ Your shopping cart
             <td>{{ product.name }}</td>
             <td>{{ item.quantity }}</td>
             {% comment %} The product is assigned the value  of item.product {% endcomment %}
-  
+            <td>
+                <form action="{%  url "cart:cart_remove" product.id  method="post" %}">
+                    <input type="submit" value="Remove">
+                    {% csrf_token %}
+                    {% comment %}prevents crossite forgies {% endcomment %}
+                </form>
+            </td>
+            <td class="num">${{ item.price }}</td>
+            <td class="num">${{ item.total_price }}</td>
+        </tr>
+        {% endwith %}
+        {% endfor %}
+        <tr>
+            <td>Total</td>
+            <td colspan="4"></td>
+            <td class="num">${{ cart.get_total_price }}</td>
         </tr>
     </tbody>
    </table>
+   <p class="text-right">
+    <a href="{%   url "shop:product_list" %}" class="button">Continue shopping</a>
+    <a href="#">Checkout</a>
+   </p>
+   {% endblock %}
