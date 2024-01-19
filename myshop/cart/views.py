@@ -28,7 +28,7 @@ def cart_add(request, product_id):
     
     
     
-    
+    return render(request, 'cart/detail.html',{'form':form})
 #a view to remove items from the cart
 
 @require_POST
