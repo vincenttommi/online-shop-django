@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{%  load static %}
-
-
+{% load static %}
 
 {% block title %}
 Your shopping cart
-{% endblock %} 
+{% endblock %}
+
+{% block content %}
    <h1>Your shopping cart</h1>
    <table class="cart">
     <thead>
@@ -19,24 +19,23 @@ Your shopping cart
         </tr>
     </thead>
     <tbody>
-        {% for item in cart   %}
-        {% with product=item.product  %}
-        {% comment %}creating a local context using with statement {% endcomment %}
-        <tr>
+        {% for item in cart %}
+        {% with product=item.product %}
+        {# Creating a local context using the with statement #}
+            <tr>
             <td>
-                <a  href="{{ product.get_absolute_url}}">
-                    <img  src="{% if product.image %}{{ product.image.url }}  {% else %}{% static "img/no_image.png "%}{% endif%} ">
-
+                <a href="{{ product.get_absolute_url }}">
+                    <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
                 </a>
             </td>
             <td>{{ product.name }}</td>
             <td>{{ item.quantity }}</td>
-            {% comment %} The product is assigned the value  of item.product {% endcomment %}
+            {# The product is assigned the value of item.product #}
             <td>
-                <form action="{%  url "cart:cart_remove" product.id  method="post" %}">
+                <form action="{% url 'cart:cart_remove' product.id %}" method="post">
                     <input type="submit" value="Remove">
                     {% csrf_token %}
-                    {% comment %}prevents crossite forgies {% endcomment %}
+                    {# Prevents cross-site forgeries #}
                 </form>
             </td>
             <td class="num">${{ item.price }}</td>
@@ -52,7 +51,7 @@ Your shopping cart
     </tbody>
    </table>
    <p class="text-right">
-    <a href="{%   url "shop:product_list" %}" class="button">Continue shopping</a>
+    <a href="{% url 'shop:product_list' %}" class="button">Continue shopping</a>
     <a href="#">Checkout</a>
    </p>
-   {% endblock %}
+{% endblock %}
