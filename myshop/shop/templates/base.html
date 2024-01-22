@@ -10,9 +10,27 @@
             <a href="/" class="logo">My shop</a>
         </div>
         <div id="subheader">
-            <div class="cart">
-                Your cart is empty
-            </div>
+                <div class="cart">
+                    {% with total_items=cart|length    %}
+                    {% comment %} django template used to create a local variable total_items and calculates length of cart usng length filter {% endcomment %}
+                    {%  if total_items > 0 %}
+                    {% comment %}This conditional statement checks wether there are items in shopping cart {% endcomment %}
+                    Your cart:
+                    <a href="{% url "cart:cart_detail" %}">
+                        {% comment %} creates a link to the cart detail page using {% url%}  template tag
+                        the argument 'cart:cart_detail' refers  to the URL named  'cart_detail' within the cart app{% endcomment %}
+                        {{ total_items }}item{{ total_items|pluralize }},
+                        {% comment %} Displays the total number of items in cart and  {{ total_items|pluralize }},
+                        adds appropriate plurazation , so it would say item  for one item and items for 
+                        more than one{% endcomment %}
+                        ${{ cart.get_total_price }}
+                        {% comment %}Displays the total price of all items in the cart {% endcomment %}
+                    </a>
+                    {% else %}
+                    Your cart is empty
+                    {% endif   %}
+                    {% endwith %}
+                </div>
         </div>
         <div>
             {%  block content  %}
