@@ -28,7 +28,7 @@ def cart_add(request, product_id):
     
     
     
-    return render(request, 'cart/detail.html',{'form':form})
+    return render(request, 'cart_detail.html',{'form':form})
 #a view to remove items from the cart
 
 @require_POST
@@ -81,7 +81,23 @@ def cart_detail(request):
     cart = Cart(request)
     #creating instance of class cart and  passing a request
     
+    for item in cart:
+        #This is a loop that iterates over each item in the cart possible a list of items 
+        item['update_quantity_form'] = CartAddProductForm(initial={
+            'quantity':item['quantity'],'override':True})
+    
     return render(request, 'cart/detail.html',{'cart':cart})
+"""
+
+
+created  an instance of CartAddProductForm for each  item in  the cart to allow  changing product
+quantities .I initialize the form with the current item quantity and set the override field to True
+so that when I submit the form to the cart_add view,current quantity is replaced with new one
+
+
+
+"""
+
 
 
     
