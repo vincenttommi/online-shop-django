@@ -46,6 +46,14 @@ class Cart:
             self.save()
             # save the changes
 
+
+
+    def save(self):
+        #mark the session as "modified" to make sure  it gets saved   
+        self.session.modified = True
+
+
+ 
     # Method for removing products from the cart
     def remove(self, product):
         """
@@ -72,15 +80,24 @@ class Cart:
         product_ids = self.cart.keys()
         # getting the products objects and adding them to the cart
         products = Product.objects.filter(id__in=product_ids)
+        #This line fetches all Product objects whose IDs are in the product_ids list.
 
         cart = self.cart.copy()
+        #creates a new dictionary cart that has  the same key value-pairs as self.cart
+        #This is often done to avoid unintended modifications to the original dictionary
+        #working with a copy
 
         for product in products:
             cart[str(product.id)]['product'] = product
+            #This part is accessing a specific entry in the cart dictionary
 
         for item in cart.values():
+            #This line initiates a loop that iterates over values in the cart dictionaries
             item['price'] = Decimal(item['price'])
+            #within each iteration , this line is converting the price  value of the item dictionary to a decimal type
             item['total_price'] = item['price'] * item['quantity']
+            #a new key total_price is added to the item dictionary and its value is  calculated
+            #by multplying the price  by the quantity
             yield item
 
     # Method to return the total number of items in the cart
@@ -94,6 +111,7 @@ class Cart:
     # Method to calculate the total cost of items in the cart
     def get_total_price(self):
         return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())
+    #it calculates the  product of decimal representation of price and quantity
 
     # Method for clearing cart session
     def clear(self):

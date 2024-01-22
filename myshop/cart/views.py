@@ -75,5 +75,14 @@ def  product_detail(request, id,slug):
 
     
 
+#This views gets the current cart and displays it
+def cart_detail(request):
+    #passing request as a parameter
+    cart = Cart(request)
+    #creating instance of class cart and  passing a request
+    
+    return render(request, 'cart/detail.html',{'cart':cart})
 
- 
+
+    
+      
