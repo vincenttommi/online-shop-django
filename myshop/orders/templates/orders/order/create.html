@@ -1,36 +1,30 @@
-{% extends  "base.html"  %}
-{%    block title %}
-    Checkout
-{% endblock %}
+{% extends "base.html" %}
+{% block title  %}
+   Checkout
+{% endblock %} 
 
 
-{%  block content  %}
-   <h1>Checkout</h1>
-   <div class="order-info">
-     <h3>Your Order</h3>
-    <ul>
-        {%  for  item in cart %}
-        {% comment %}iterates through the cart and loops individual items  {% endcomment %}
-        <li>
-         {{ item.quantity }} x {{ item.product.name }}
-        {% comment %}This is likely a placeholder fo Quantity of a product , quantity will be inserted here
-        when the template is being rendered  {% endcomment %}
-        <span>${{ item.total_price }}</span>
-        {% comment %} common syntax for inserting variables  or expressons in templates for displaying the total price of item {% endcomment %}
-        </li>
-        {%  endfor  %}
-    </ul>
-    <p>Total:${{ cart.get_total_price }}</p>
-    {% comment %}getting the total price of the cart {% endcomment %}
-   </div>
-   <form   method="post"  class="order-form">
-    {{ form.as_p }}
-    {% comment %} renderes the form as a paragraph {% endcomment %}
-    <p><input type="submit"  value="place order"></p>
-    {%  csrf_token %}
-{% comment %} Prevents crossite forgeries {% endcomment %}
-   </form>
-{%  endblock  %}
+{% block content  %}
+   <h1>Checkout<h1>
+    <div class="order-info">
+        <h3>Your order</h3>
+         <ul>
+            {%   for item in cart %}
+            <li>
 
+                {{ item.quantity}}x{{ item.product.name }}
+                <span>${{ item.total_price }}</span>
+            </li>
+            {%  endfor %}
+         </ul>
+         <p>Total:  {{ cart.get_total_price }}</p>
+    </div>
+        <form   method="post"  class="order-form">
+            {{ form.as_p }}
+            {% comment %} renders form as a template {% endcomment %}
+            <p><input type="submit" value="Place order"></p>
+            {% csrf_token %}
+        </form>
+        {% endblock %}
 
-{% comment %}This template displays the cart items, including totals and  the form to place an order {% endcomment %}
+{% comment %}This template displays cart items, including total and the form to place an order  {% endcomment %}

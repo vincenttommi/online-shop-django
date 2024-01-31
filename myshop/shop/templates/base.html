@@ -26,7 +26,7 @@
                         ${{ cart.get_total_price }}
                         {% comment %}Displays the total price of all items in the cart {% endcomment %}
                     </a>
-                    {% else %}
+                    {% elif not order %}
                     Your cart is empty
                     {% endif   %}
                     {% endwith %}

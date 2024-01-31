@@ -1,13 +1,14 @@
-{%  extends   "base.html"  %}
-{% block title  %}
-   Thank you
+{% extends "base.html"  %}
+{% block title %}
+    Thank you
 
+{% endblock %}
 
-{%  endblock %}
 {%  block content %}
-   <h1>Thank you</h1>
-   <p>Your order been successfully completed.Your order number is
-   <strong>{{ order.id }}</strong></p>
+    <h1>Thank you</h1>
+    <p>Your order has been successfully completed. Your order number is 
+        <strong>{{ order.id }}</strong>
+    </p>
+{% endblock  %}    
 
-{% endblock  %}
-{% comment %} This the template that is being rendered when the  order is successfully created {% endcomment %}
+{% comment %}This is the template  that is being rendered when the order is successfully created {% endcomment %}

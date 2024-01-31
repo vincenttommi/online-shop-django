@@ -138,4 +138,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 CART_SESSION_ID = 'cart'
 # a session  key to check if a custom session key is set
 
+EMAIL_BACKEND = 'django.core.mail.backends'
 
