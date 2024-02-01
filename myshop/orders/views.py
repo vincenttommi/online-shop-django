@@ -51,21 +51,40 @@ def order_create(request):
 
     
                    
-                
-                
+
+
+
+def  order_create(request):
+    #receiving object as a parameter
+    if request.method == 'POST':
+        #checking if the Http response is equal to POSt
+        if form.is_valid():
+            #an if statement to check if form is valid
+            
+            # cart.clear()
+            #launch asynchronous task
+            order  = form.save()
+            #saving the details of the form to database
+            order_created.delay(order.id)
+            return redirect('order_succes')
+        #Redirecting to a success page after order creation
+        else:
+            form  = OrderCreateForm()
+            #returning the form and rendering the template for GET requests
+             
+    return render(request, 'orders/order/create.html', {'form':form})
+           
         
 
      
-def  order_create(request):
-            #receives request as a parameter
+
             
-            if request.method == 'POST':
-                #checks if the htpp request is equal to POST
-             if form.is_valid():
-                 
-                 cart.clear()
-                #launch asynchrous task
-            order_created.delay(order.id)
+        
+            
+            
+#This method calls  the delay() method of  the task to excute it asynchronously.
+#The task will be  added to  the message  queue and executed by the  Celery worker as soon as possible
+ 
                   
                 
 
