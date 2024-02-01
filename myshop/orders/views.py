@@ -5,64 +5,73 @@ from .forms import OrderCreateForm
 from cart.cart import Cart
 from .tasks import order_created
 from .models import Order
-
+from  .tasks import order_created
+    
 
 
 def order_create(request):
-    #taking request as a parameter
+    # Creating an instance of class Cart and passing a request to it
     cart = Cart(request)
-    # creating instance of class Cart and passing a request
-    if request.method  == 'POST':
-        #checking if the Http request method is equal to POST
-        form = OrderCreateForm(request.POST)
-        #creating an instance of OrderCreateForm and assigning Post request
-        if form.is_valid():
-            #checking if the form is valid
-            order = form.save()
-            #creating an object order and saving  details of the form
-            
-            for item in cart:
-                OrderItem.objects.create(order=order,product=item['product'],price=item['price'],quantity=item['quantity'])
-                
-                
-                #clear cart
-                cart.clear()
-        return  render(request, 'orders/order/created.html', {'order':order})  
- 
-    else:
-        form  = OrderCreateForm()
-        #creating an instance of OrderCreateForm object and assigning it to form
-        return render(request, 'orders/order/create.html', {'cart':cart, 'form':form})
     
+    # Checking if the HTTP request method is equal to POST
+    if request.method == 'POST':
+        # Creating an instance of OrderCreateForm, then populating it with data submitted by the user
+        # and assigning this instance to a variable 'form' for further processing/validation in view function
+        form = OrderCreateForm(request.POST)
+        
+        # An if statement that checks if the form is valid
+        if form.is_valid():
+            # Creating an object that stores details of the form
+            order = form.save()
+            
+            # Looping items from the cart
+            for item in cart:
+                # This is a method call on the objects manager of the OrderItem model in Django.
+                # It provides methods for querying the database. 'create' is a method used to create a new object in the database.
+                OrderItem.objects.create(
+                    order=order, 
+                    product=item['product'], 
+                    price=item['price'], 
+                    quantity=item['quantity']
+                )
+                
+            # Clearing objects from the cart
+            cart.clear()
+            
+            # Rendering the template after passing 'order' to the template context
+            return render(request, 'orders/order/created.html', {'order': order})
+    
+    else:
+        # Creating an instance of OrderCreateForm class
+        # Used to render an HTML form in a Django template or to process form data submitted by a user in a view function
+        form = OrderCreateForm()
+        
+    # Rendering the 'create.html' template after passing 'cart' and 'form' to the template context
+    return render(request, 'orders/order/create.html', {'cart': cart, 'form': form})
+
+    
+                   
+                
+                
+        
+
      
-                
-                
-
-
-
-# def order_create(request):
-#     #passing request object as a parameter
-#     if request.method  == 'POST':
-#         #checking if the HTTP request method is POST
-#         form  = OrderCreateForm(request.POST)
-#         #creating an instance  of OrderCreateForm with POST data
-#         if form.is_valid():
-#             #checking if the form data is valid
-#             order = form.save()
-#             #saving the form data  to the database to create a new order
-#             cart.clear()
-#             #clearing the cart
+def  order_create(request):
+            #receives request as a parameter
             
-#             order.created.delay(order.id)
-#             #launching an asynchronous task to handle  the order creation
-#             return redirect('order_sucess')
-#             #redirecting to a sucess page after the order is successfully created
-#     else:    
-#         form = OrderCreateForm()
-#         #creating an instance of  OrderCreateForm without any data(for get requests)
-#         return render(request, 'create.html', {'form':form})
-#         #rendering the 'order_created.html' template  with form object
-            
+            if request.method == 'POST':
+                #checks if the htpp request is equal to POST
+             if form.is_valid():
+                 
+                 cart.clear()
+                #launch asynchrous task
+            order_created.delay(order.id)
+                  
+                
+
+
+
+
     
         
 
