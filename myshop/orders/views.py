@@ -6,6 +6,9 @@ from cart.cart import Cart
 from .tasks import order_created
 from .models import Order
 from  .tasks import order_created
+from django.urls  import reverse
+from django.shortcuts import render, redirect
+
     
 
 
@@ -38,6 +41,8 @@ def order_create(request):
             # Clearing objects from the cart
             cart.clear()
             
+            order_created.delay(order.id)
+            
             # Rendering the template after passing 'order' to the template context
             return render(request, 'orders/order/created.html', {'order': order})
     
@@ -49,56 +54,17 @@ def order_create(request):
     # Rendering the 'create.html' template after passing 'cart' and 'form' to the template context
     return render(request, 'orders/order/create.html', {'cart': cart, 'form': form})
 
+
+
+
+
+
+        
+        
     
                    
 
 
 
-def  order_create(request):
-    #receiving object as a parameter
-    if request.method == 'POST':
-        #checking if the Http response is equal to POSt
-        if form.is_valid():
-            #an if statement to check if form is valid
-            
-            # cart.clear()
-            #launch asynchronous task
-            order  = form.save()
-            #saving the details of the form to database
-            order_created.delay(order.id)
-            return redirect('order_succes')
-        #Redirecting to a success page after order creation
-        else:
-            form  = OrderCreateForm()
-            #returning the form and rendering the template for GET requests
-             
-    return render(request, 'orders/order/create.html', {'form':form})
-           
-        
-
-     
-
-            
-        
-            
-            
-#This method calls  the delay() method of  the task to excute it asynchronously.
-#The task will be  added to  the message  queue and executed by the  Celery worker as soon as possible
- 
-                  
-                
 
 
-
-
-    
-        
-
-""""
-
-
-this code snippet is part of an order creation process in django web application
-that handles  the form submission clears the shopping cart and  asynchronoulsy processses the order creation using Celery
-
-
-"""          
