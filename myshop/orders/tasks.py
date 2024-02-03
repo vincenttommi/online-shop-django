@@ -20,9 +20,11 @@ def order_created(order_id):
     f'You have successfully placed an order.'
     f'Your order ID is {order_id}.'
      #initailise email message
+    print('order_email', order.email)
     
-    
-    mail_sent = send_mail(subject, message,'admin@myshop.com',)
+  
+    mail_sent = send_mail(subject, message, 'vincentommi@gmail.com', ['josphatwanjiruw@gmail.com'])
+
     #this line sends the email using django
     
     

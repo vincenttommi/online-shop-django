@@ -139,7 +139,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 CART_SESSION_ID = 'cart'
 # a session  key to check if a custom session key is set
 
-EMAIL_BACKEND = 'django.core.mail.backends'
+# EMAIL_BACKEND = 'django.core.mail.backends'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
 
 STRIPE_PUBLISHABLE_KEY = 'pk_test_51OfDGZKF8FDMvQdGRhPj4rr85uPVN3rAX583Qu8sKLVtgFCBPhjXB8Aoas0DdWOikm5N9FoJcgw4EUk1dTTE39LA00osskAgHN'
 STRIPE_SECRET_KEY = 'sk_test_51OfDGZKF8FDMvQdGg5cni18EdOXa6cixv0gRZ8X2LGavCVV7xQCehPfCisQWcGzodeyNC9bf3qBHNRlSalEqjhNH00IXIn8ddT'
