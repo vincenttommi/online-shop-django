@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Pay your order{% endblock %}
+{% block content %}
+   <h1>Order summary</h1>
+   <table class="cart">
+      <thead>
+        <tr>
+            <th>Image</th>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantiy</th>
+            <th>Total</th>
+        </tr>
+      </thead>
+   <table>
+      <tbody>
+        
+          {% for item in  order.items.all %}
+          {% comment %}looping items in order {% endcomment %}
+          <tr  class="row{%  cycle "1" "2"  %}">
+            <td>
+                <img src="{% if item.product.image %}{{ item.product.image.url }}  {% else %} 
+                {% static  "img/no_image.png"   %}{% endif  %}">
+
+            </td>
+            <td>{{ item.product.name }}</td>
+            <td class="num">${{ item.price }}</td>
+            <td class="num">{{ item.quantity }}</td>
+            <td class="num">${{ item.get_cost}}</td>
+          </tr>
+          {% endfor %}
+          <tr class="total">
+            <td colspan="4">Total</td>
+            <td  class="num">${{ order.get_total_cost}}</td>
+
+          </tr>
+      </tbody>
+    </table>
+    <form action="{%  url "payment:process"%}" method="post">
+        <input type="submit" value="Pay now">
+        {% csrf_token %} 
+
+    </form>
+
+    {% comment %}This is the template to display order summary to the user and allow the
+    client to proceed with payment {% endcomment %}
+    {% comment %}when the form is submitted , the payment_process  view creates the Stripe session and
+    redirects the user to Stripe-hosted payment form {% endcomment %}
