@@ -14,6 +14,7 @@ urlpatterns = [
     #registering carts urls in the main project url
     path('orders/',include('orders.urls', namespace='orders')),
     #registering orders url in the  main project URL
+    path('payment/', include('payment.urls', namespace='payment')),
 ]
 
 

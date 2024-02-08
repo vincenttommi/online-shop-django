@@ -32,8 +32,16 @@ def  order_create(request):
                 cart.clear()
                 
                 order_created.delay(order.id)
-                
-                return  render(request, 'orders/order/created.html',{'order':order})
+                #setting  the order in the session
+                request.session['order_id'] = order.id
+                #redirecting payment
+                return  redirect(reverse('payment:process'))
+            """
+            
+            Instead of  rendering the template orders/order/created.html when placing
+            a new order ID is stored in the user session and user is redirected to the payment:
+            process URL
+            """
             
     else:
         form  = OrderCreateForm()
