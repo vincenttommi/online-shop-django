@@ -2,7 +2,14 @@ from decimal import Decimal
 import  stripe
 from django.conf import settings
 from django.shortcuts  import render, redirect, reverse, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 from orders.models import Order
+
+
+
+
+
+
 
 
 
@@ -75,3 +82,44 @@ def payment_completed(request):
 #The  view for stripe to redirect the user to if the payment is cancelled
 def payment_cancelled(request):
     return render(request, 'payment/canceled.html')
+
+
+
+
+
+
+
+
+
+@csrf_exempt
+def stripe_webhook(request):
+    # Retrieve the request's body and parse it as JSON
+    payload = request.body.decode('utf-8')
+    event = None
+
+    try:
+        event = json.loads(payload)
+    except ValueError as e:
+        # Invalid payload
+        return HttpResponse(status=400)
+
+    # Handle the event
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        if session['mode'] == 'payment' and session['payment_status'] == 'paid':
+            try:
+                order = Order.objects.get(id=session['client_reference_id'])
+            except Order.DoesNotExist:
+                return HttpResponse(status=404)
+
+            # Marking order as paid
+            order.paid = True
+            # Store Stripe payment ID
+            order.stripe_id = session['payment_intent']
+            order.save()
+
+            # Launching asynchronous task
+            payment_completed.delay(order.id)
+
+    return HttpResponse(status=200)
+            
