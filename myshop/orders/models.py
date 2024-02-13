@@ -1,5 +1,6 @@
 from django.db import models
 from shop.models import Product
+from django.conf import settings
 
 
 """
@@ -70,6 +71,21 @@ class OrderItem(models.Model):
     #get_total_cost() method  to obtain the total cost of items bought in this order
         
         
+  
+#This method is used to  return stripe dashboard's URL for payment associated with order 
+    def  get_stripe_url(self):
+        #method to get stripe url
+        if not self.stripe_id:
+            # no payment associated 
+            return ''
+        if '_test_' in settings.STRIPE_SECRET_KEY:
+            #   Stripe path for test payments
+            path  = '/test/'
+        else:
+            #Stripe path for real  payments
+            path  = '/'
+             
+        return f'http://dashboard.stripe.com{path}payments/{self.stripe_id}'        
     
     
     
