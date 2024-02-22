@@ -1,17 +1,10 @@
 from django.contrib import admin
-from .models import Order,OrderItem
+from .models import Order, OrderItem
 from django.utils.safestring import mark_safe
-from  django.http import HttpResponse
+from django.http import HttpResponse
 import csv
-import  datetime
+import datetime
 from django.urls import reverse
-# from .utils import order_payment, order_detail
-
-
-
-
-
-
 
 
 def export_to_csv(modeladmin, request, queryset):
@@ -41,23 +34,17 @@ def export_to_csv(modeladmin, request, queryset):
 
 export_to_csv.short_description = 'Export to CSV'
 
+
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
     raw_id_fields = ['product']
 
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    def order_detail(self, request, obj=None):
-        url  =  reverse('orders:admin_order_detail', args=[obj.id])
-        return  mark_safe(f'<a href="{url}">View</a>')
-    #This function takes  an Order object as an argument and returns an HTML link for admin_order_detail
-    # URL
-    
-    list_display = ['id', 'first_name', 'last_name', 'email', 'address', 'postal_code', 'city', 'paid', 'created', 'updated', 'order_payment', 'order_detail']
-    list_filter = ['paid','created','updated']  # Use the custom filter
-    
-    inlines = [OrderItemInline]
-    actions = [export_to_csv]
+    def order_detail(self, obj):
+        url = reverse('orders:admin_order_detail', args=[obj.id])
+        return mark_safe(f'<a href="{url}">View</a>')
 
     def order_payment(self, obj):
         order_items = obj.items.all()
@@ -70,16 +57,8 @@ class OrderAdmin(admin.ModelAdmin):
         if payment_links:
             return mark_safe(', '.join(payment_links))
         return ''
-    order_payment.short_description = 'Stripe Payment'
 
-# admin.site.register(Order, OrderAdmin
-    
-    
-    def   order_detail(obj):
-        url  =  reverse('orders:admin_order_detail', args=[obj.id])
-        return  mark_safe(f'<a href="{url}">View</a>')
-    #This function takes  an Order object as an argument and returns an HTML link for 
-    #admin_order_detail
-        
-               
-               
+    list_display = ['id', 'first_name', 'last_name', 'email', 'address', 'postal_code', 'city', 'paid', 'created', 'updated', 'order_payment', 'order_detail']
+    list_filter = ['paid', 'created', 'updated']
+    inlines = [OrderItemInline]
+    actions = [export_to_csv]
