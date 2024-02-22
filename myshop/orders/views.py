@@ -9,6 +9,15 @@ from django.urls  import reverse
 from django.shortcuts import render, redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from .models import OrderItem,Order
+from django.conf import settings
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+import  weasyprint
+
+
+
+
+
 
 
 
@@ -64,7 +73,26 @@ def admin_order_detail(request, order_id):
 
 
 
+@staff_member_required
+#decorator that  makes  sure  only staff users can acess this view
+def admin_order_pdf(request,order_id):
+    
+    order  = get_object_or_404(Order, id=order_id)
+    #getting the order id 
+    html  = render_to_string('orders/order/pdf.html', {'order':order})
+    #rendering the order/order
+    
+    
+    response  = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] =  f'filename=order_{order.id}.pdf'
+    weasyprint.HTML(string=html).write_pdf(response, stylesheets=[weasyprint.CSS(settings.STATIC_ROOT / 'css/pdf.css')])
+    #used to genearate a pdffile  from rendered HTML code and write to HttpResponse object
+    
+    return  response
 
+#a view  to generate  a pdf   invoice  for an order
+    
+    
         
         
     
