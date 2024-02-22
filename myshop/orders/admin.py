@@ -1,26 +1,18 @@
 from django.contrib import admin
-from .models import Order, OrderItem
+from .models import Order,OrderItem
 from django.utils.safestring import mark_safe
-from django.http import HttpResponse
+from  django.http import HttpResponse
 import csv
-import datetime
+import  datetime
 from django.urls import reverse
+# from .utils import order_payment, order_detail
 
 
 
 
 
 
-def order_detail(obj):
-    url  =  reverse('orders:admin_order_detail', args=[obj.id])
-    return  mark_safe(f'<a href="{url}">View</a>')
-#This function takes  an Order object as an argument and returns an HTML link for admin_order_detail
-# URL
-    
-    
-    
-    
-    
+
 
 def export_to_csv(modeladmin, request, queryset):
     opts = modeladmin.model._meta
@@ -55,8 +47,15 @@ class OrderItemInline(admin.TabularInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'first_name', 'last_name', 'email', 'address', 'postal_code', 'city', 'paid', 'created', 'updated', 'order_payment']
-    list_filter = ['paid', 'created', 'updated', 'order_detail']
+    def order_detail(self, request, obj=None):
+        url  =  reverse('orders:admin_order_detail', args=[obj.id])
+        return  mark_safe(f'<a href="{url}">View</a>')
+    #This function takes  an Order object as an argument and returns an HTML link for admin_order_detail
+    # URL
+    
+    list_display = ['id', 'first_name', 'last_name', 'email', 'address', 'postal_code', 'city', 'paid', 'created', 'updated', 'order_payment', 'order_detail']
+    list_filter = ['paid','created','updated']  # Use the custom filter
+    
     inlines = [OrderItemInline]
     actions = [export_to_csv]
 
@@ -74,3 +73,13 @@ class OrderAdmin(admin.ModelAdmin):
     order_payment.short_description = 'Stripe Payment'
 
 # admin.site.register(Order, OrderAdmin
+    
+    
+    def   order_detail(obj):
+        url  =  reverse('orders:admin_order_detail', args=[obj.id])
+        return  mark_safe(f'<a href="{url}">View</a>')
+    #This function takes  an Order object as an argument and returns an HTML link for 
+    #admin_order_detail
+        
+               
+               
