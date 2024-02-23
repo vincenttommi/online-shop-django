@@ -1,5 +1,5 @@
 #a view to handle the form and create a new Order
-from django.shortcuts import render,redirect, get_list_or_404
+from django.shortcuts import render,redirect, get_object_or_404
 from .forms import OrderCreateForm
 from cart.cart import Cart
 from .tasks import order_created

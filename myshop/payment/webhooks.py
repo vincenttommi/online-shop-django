@@ -3,6 +3,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from orders.models import Order
+from .tasks  import payment_completed
 
 
 
@@ -52,6 +53,17 @@ def stripe_webhook(request):
             #marking order as paid
             order.paid = True
             order.save()
+            
+            
+            #launch asynchronous task
+            payment_completed.delay(order.id)
+            
+          
+          
+        return  HttpResponse(status=200)    
+    #payment_completed  task is queued by  calling  it's delay method
+    #The task will be added  to the queue and will be excecuted  by a Celery worker
+    #as soon as possible
             
             
 

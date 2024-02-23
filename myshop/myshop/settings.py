@@ -151,3 +151,6 @@ STRIPE_API_VERSION = '2022-08-01'
 STRIPE_WEBHOOK_SECRET = 'whsec_e30ad4fad2b85c5d220b5be8ce814a7bbc4a5efb4aed276a35c4a09dc7e06b33'
 STATIC_ROOT  = BASE_DIR / 'static'
 
+
+EMAIL_BACKEND  = 'django.core.mail.backends.console.EmailBackend'
+#setting up simple mail transfer protocol

@@ -15,7 +15,7 @@
             {{ order.address }}<br>
             {{  order.postal_code }}, {{order.city }}
         </p>
-        <h3>Items bougth</h3>
+        <h3>Items bought</h3>
         <table>
             <thead>
                 <tr>
@@ -47,7 +47,7 @@
 
 
 
-        <span class="{% if orde.paid %}paid{% else %}pending{% endif  %}">
+        <span class="{% if order.paid %}paid{% else %}pending{% endif  %}">
             {%  if order.paid %}Paid{% else  %}Pending payment{% endif  %}
         </span>
     </body>
