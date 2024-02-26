@@ -2,27 +2,30 @@ from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from .models import Coupon
-from .forms  import CouponApplyForm
-
-
+from .forms import CouponApplyForm
 
 @require_POST
 def coupon_apply(request):
-    now  = timezone.now()
-    #using Django's  timezone to get the current datetime
-    form   = CouponApplyForm(request.POST)
-    #instantiate CouponApplyForm using the posted data 
+    # Get the current time using Django's timezone
+    now = timezone.now()
+    
+    # Instantiate CouponApplyForm using the posted data 
+    form = CouponApplyForm(request.POST)
+    
+    # Check if the form is valid
     if form.is_valid():
-        #checking ig the form is valid
-        code  = form.cleaned_data['code']
-        #getting  the code entered  by the user  from the form cleaned data dictionary
-        try :
-            coupon = Coupon.objects.get(code__iexact=code, valid_from__Ite=now,valid_to__gte=now,active=True)
-            #using iexact field lookup to perform a case-insensitive exact match
+        # Get the code entered by the user from the form cleaned data dictionary
+        code = form.cleaned_data['code']
+        
+        # Try to retrieve the coupon from the database
+        try:
+            # Use case-insensitive exact match for the code and check validity period
+            coupon = Coupon.objects.get(code__iexact=code, valid_from__lte=now, valid_to__gte=now, active=True)
+            # Store the Coupon ID in the user's session
+            request.session['coupon_id'] = coupon.id
         except Coupon.DoesNotExist:
+            # If the coupon does not exist, set the coupon ID in the session to None
             request.session['coupon_id'] = None
-            #storing the Coupon  ID in the user's session
-    return  redirect('cart:cart_detail')    
-        #redirecting the user to the cart_detail URL to display the cart with the coupon applied
-         
-
+    
+    # Redirect the user to the cart detail page to display the cart with the coupon applied
+    return redirect('cart:cart_detail')
