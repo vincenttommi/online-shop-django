@@ -2,6 +2,7 @@
 from decimal import Decimal
 from django.conf import settings
 from shop.models import Product
+from coupons.models import Coupon
 
 # This is the Cart class that will allow me to manage the shopping cart.
 # The cart is initialized with a request object
@@ -21,6 +22,11 @@ class Cart:
             # Initialize an empty cart in the session
             cart = self.session[settings.CART_SESSION_ID] = {}
         self.cart = cart
+        
+        #storing the  current applied coupon
+        self.coupon_id  = self.session.get('coupon_id')
+        #getting coupon_id session key from the current session and storing its value in 
+        # the cart object
 
     # Method to add products to the cart or update their quantity (add and save methods)
 
@@ -118,3 +124,33 @@ class Cart:
         # remove cart from session
         del self.session[settings.CART_SESSION_ID]
         self.save()
+
+
+    @property
+    #defining this method as a property
+    def coupon(self):
+        #def coupon that recieves self as a parameter
+        if self.coupon_id:
+            try:
+                return Coupon.objects.get(id=self.coupon_id)
+            except  Coupon.DoesNotExist:
+                  pass 
+        return None    
+    
+        
+        #if the cart contains  a coupon,I retrieve  it's discsount rate and  return the 
+        #amount to be deducted
+    def get_discount(self):
+        if self.coupon:
+            return (self.coupon.discount / Decimal(100)) * self.get_total_price()
+        return Decimal(0) 
+    
+    def  get_total_price_after_discount(self):
+        return self.get_total_price() - self.get_discount()
+    #returning the total amount of the  the cart after deducting the amount returned  by
+    #get_discount method
+    
+    
+    
+
+       
