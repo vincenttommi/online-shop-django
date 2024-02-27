@@ -23,6 +23,7 @@ def cart_add(request, product_id):
         cart.add(product=product,quantity=cd['quantity'],override_quantity=cd['override'])
         #Calls the add method on the cart object to add specified product with specified
         #quantity to the shopping cart
+        
         return redirect('cart:cart_detail')
     #Redirects the user to the cart detail page after successfully adding the product to the cart
     
@@ -88,7 +89,7 @@ def cart_detail(request):
         
     coupon_apply_form = CouponApplyForm()
 
-    return render(request,'cart/detail.html',{'cart':cart, 'coupon_apply_form':coupon_apply_form}) #'coupon_apply_form')
+    return render(request,'cart/detail.html', {'cart':cart, 'coupon_apply_form':coupon_apply_form}) 
 """ 
 created  an instance of CartAddProductForm for each  item in  the cart to allow  changing product
 quantities .I initialize the form with the current item quantity and set the override field to True

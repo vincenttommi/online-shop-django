@@ -124,32 +124,27 @@ class Cart:
         # remove cart from session
         del self.session[settings.CART_SESSION_ID]
         self.save()
-
-
-    @property
-    #defining this method as a property
-    def coupon(self):
-        #def coupon that recieves self as a parameter
-        if self.coupon_id:
-            try:
-                return Coupon.objects.get(id=self.coupon_id)
-            except  Coupon.DoesNotExist:
-                  pass 
-        return None    
-    
         
-        #if the cart contains  a coupon,I retrieve  it's discsount rate and  return the 
-        #amount to be deducted
+    @property
+    def coupon(self):
+            if self.coupon_id:
+                try:
+                    return Coupon.objects.get(id=self.coupon_id)
+                except Coupon.DoesNotExist:
+                    pass
+            return None
+
     def get_discount(self):
-        if self.coupon:
-            return (self.coupon.discount / Decimal(100)) \
-            * self.get_total_price()
-        return Decimal(0) 
-    
-    def  get_total_price_after_discount(self):
-        return self.get_total_price() - self.get_discount()
-    #returning the total amount of the  the cart after deducting the amount returned  by
-    #get_discount method
+            if self.coupon:
+                return (self.coupon.discount / Decimal(100)) * self.get_total_price()
+            return Decimal(0)
+
+    def get_total_price_after_discount(self):
+            return self.get_total_price() - self.get_discount()
+
+
+
+
     
     
     
