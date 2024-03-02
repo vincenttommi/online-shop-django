@@ -88,6 +88,7 @@ def cart_detail(request):
             'quantity':item['quantity'],'override':True})
         
     coupon_apply_form = CouponApplyForm()
+    print("cart", cart)
 
     return render(request,'cart/detail.html', {'cart':cart, 'coupon_apply_form':coupon_apply_form}) 
 """ 
